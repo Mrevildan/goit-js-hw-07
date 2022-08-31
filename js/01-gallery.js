@@ -30,15 +30,16 @@ function onClickLargeImg(evt) {
     if (!isGalleryPhotoEl) {
     return;
   }
-  const photoUrlEl = evt.target.dataset.source;
+  const photoUrlEl = `<img src='${evt.target.dataset.source}' width="800" height="600">`
 
-  const instance = basicLightbox.create(
-    `<img class="modal__image" src="${photoUrlEl}"/>`
-  );
+  const instance = basicLightbox.create(photoUrlEl, {
+    onShow: (instance) => {document.addEventListener("keydown", onEscKeyPress);
+  },
+    onClose: (instance) => {document.removeEventListener("keydown", onEscKeyPress);
+  }
+  });
 
   instance.show();
-
-  window.addEventListener("keydown", onEscKeyPress);
 
   function onEscKeyPress(evt) {
     const ESC_KEY_CODE = "Escape";
@@ -46,7 +47,6 @@ function onClickLargeImg(evt) {
     if (evt.code === ESC_KEY_CODE) {
       instance.close();
 
-      window.removeEventListener("keydown", onEscKeyPress);
     }
   }
 }
